@@ -1,0 +1,26 @@
+# Secrets — never commit these
+.env
+
+# Virtual environment
+venv/
+
+# SQLite database
+*.db
+*.sqlite3
+instance/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
