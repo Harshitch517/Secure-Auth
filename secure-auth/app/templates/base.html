@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Secure Authentication System">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>{% block title %}SecureAuth{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+
+  <!-- ── Navigation ──────────────────────────────────────── -->
+  <nav class="nav">
+    <a class="nav-brand" href="{{ url_for('index') }}">
+      <span class="crest">🔐</span>Secure<span>Auth</span>
+    </a>
+
+    <div class="nav-right">
+      {% if current_user.is_authenticated %}
+        <span class="nav-user">
+          {{ current_user.username }}
+          <span class="badge badge-{{ current_user.role }}" style="margin-left:0.35rem">
+            {{ current_user.role }}
+          </span>
+        </span>
+        <a href="{{ url_for('dashboard.dashboard_redirect') }}" class="btn btn-ghost btn-sm">Dashboard</a>
+        <a href="{{ url_for('auth.logout') }}" class="btn btn-ghost btn-sm">Sign out</a>
+      {% else %}
+        <a href="{{ url_for('auth.login') }}" class="btn btn-ghost btn-sm">Sign in</a>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm">Get started</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <!-- ── Flash messages ──────────────────────────────────── -->
+  {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+      <div class="flash-wrap">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- ── Page content ────────────────────────────────────── -->
+  {% block content %}{% endblock %}
+
+  <!-- ── Scripts ─────────────────────────────────────────── -->
+  <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+  {% block scripts %}{% endblock %}
+
+</body>
+</html>

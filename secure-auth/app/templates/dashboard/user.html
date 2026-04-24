@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard — SecureAuth{% endblock %}
+
+{% block content %}
+<div class="page">
+
+  <div class="page-hd">
+    <h1 class="page-title">Hello, {{ current_user.username }} 👋</h1>
+    <p class="page-sub">
+      Welcome back to SecureAuth.
+      <span class="badge badge-{{ current_user.role }}" style="margin-left:0.35rem">{{ current_user.role }}</span>
+    </p>
+  </div>
+
+  <!-- ── Account Info ───────────────────────────────────────── -->
+  <div class="card">
+    <p class="card-title">Account</p>
+    <div class="info-grid">
+      <div>
+        <p class="info-label">Username</p>
+        <p class="info-value">{{ current_user.username }}</p>
+      </div>
+      <div>
+        <p class="info-label">Email</p>
+        <p class="info-value">{{ current_user.email }}</p>
+      </div>
+      <div>
+        <p class="info-label">Role</p>
+        <p class="info-value">
+          <span class="badge badge-{{ current_user.role }}">{{ current_user.role }}</span>
+        </p>
+      </div>
+      <div>
+        <p class="info-label">Member since</p>
+        <p class="info-value">
+          {{ current_user.created_at.strftime('%b %d, %Y') if current_user.created_at else '—' }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Security Status ───────────────────────────────────── -->
+  <div class="card">
+    <p class="card-title">Security</p>
+    <div class="info-grid">
+      <div>
+        <p class="info-label">Email verified</p>
+        <p class="info-value">
+          {% if current_user.email_verified %}
+            <span class="badge badge-success">✓ Verified</span>
+          {% else %}
+            <span class="badge badge-neutral">Not verified</span>
+          {% endif %}
+        </p>
+      </div>
+      <div>
+        <p class="info-label">Two-factor auth</p>
+        <p class="info-value">
+          <span class="badge badge-success">✓ Enabled (Email)</span>
+        </p>
+      </div>
+      <div>
+        <p class="info-label">Last login</p>
+        <p class="info-value">
+          {{ current_user.last_login.strftime('%b %d, %Y %H:%M') if current_user.last_login else 'First session' }}
+        </p>
+      </div>
+      <div>
+        <p class="info-label">Failed attempts</p>
+        <p class="info-value">{{ current_user.failed_login_attempts }}</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

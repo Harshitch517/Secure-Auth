@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard — SecureAuth{% endblock %}
+
+{% block content %}
+<div class="page page-wide">
+
+  <div class="page-hd">
+    <h1 class="page-title">Admin Dashboard</h1>
+    <p class="page-sub">User management and security audit trail.</p>
+  </div>
+
+  <div class="info-grid" style="grid-template-columns: 1fr 1fr; gap: 2rem;">
+    <!-- ── Users Management ──────────────────────────────────── -->
+    <div>
+      <div class="card card-gold">
+        <p class="card-title">All Users ({{ users|length }})</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for u in users %}
+              <tr>
+                <td>
+                  <div style="font-weight:500; color:var(--text)">{{ u.username }}</div>
+                  <div style="font-size:0.75rem; color:var(--muted)">{{ u.email }}</div>
+                </td>
+                <td>
+                  <span class="badge badge-{{ u.role }}">{{ u.role }}</span>
+                </td>
+                <td>
+                  {% if u.id != current_user.id %}
+                    <form method="POST" action="{{ url_for('dashboard.change_role', user_id=u.id, new_role='admin' if u.role=='user' else 'user') }}" style="display:inline">
+                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                      <button type="submit" class="btn btn-ghost btn-sm" onclick="return confirm('Change role for {{ u.username }}?')">
+                        {% if u.role == 'user' %}Make Admin{% else %}Make User{% endif %}
+                      </button>
+                    </form>
+                  {% else %}
+                    <span style="font-size:0.75rem; color:var(--muted)">You</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Audit Log ─────────────────────────────────────────── -->
+    <div>
+      <div class="card">
+        <p class="card-title">Audit Trail</p>
+        <div class="table-wrap" style="max-height: 600px; overflow-y: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Event</th>
+                <th>User / IP</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for log in logs %}
+              <tr>
+                <td style="white-space:nowrap; font-family:monospace; font-size:0.75rem; color:var(--muted)">
+                  {{ log.timestamp.strftime('%H:%M:%S') }}<br>
+                  {{ log.timestamp.strftime('%Y-%m-%d') }}
+                </td>
+                <td>
+                  <div style="font-weight:600; color:var(--text); font-size:0.78rem">{{ log.action }}</div>
+                  {% if log.details %}
+                    <div style="font-size:0.75rem; color:var(--subtle)">{{ log.details }}</div>
+                  {% endif %}
+                </td>
+                <td>
+                  <div style="font-size:0.8rem; color:var(--text)">
+                    {% if log.user %}
+                      {{ log.user.username }}
+                    {% else %}
+                      <span style="color:var(--muted)">System</span>
+                    {% endif %}
+                  </div>
+                  <div style="font-size:0.7rem; font-family:monospace; color:var(--subtle)">{{ log.ip_address }}</div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

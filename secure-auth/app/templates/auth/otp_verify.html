@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify Email — SecureAuth{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-crest">✉️</div>
+    <h1 class="auth-title">Verify your identity</h1>
+    <p class="auth-sub">Enter the 6-digit code sent to your email.</p>
+
+    <form method="POST" action="{% if purpose == 'login' %}{{ url_for('auth.login_otp') }}{% else %}{{ url_for('auth.otp_verify') }}{% endif %}" novalidate>
+      {{ form.csrf_token }}
+
+      <div class="form-group">
+        {{ form.code.label(class="form-label", style="text-align:center") }}
+        {{ form.code(class="form-control otp-input" + (" is-error" if form.code.errors else ""), placeholder="000000", autofocus=True, maxlength="6") }}
+        {% for error in form.code.errors %}
+          <div class="form-err" style="text-align:center">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <div class="form-group" style="margin-top: 1.5rem">
+        {{ form.submit(class="btn btn-primary btn-full") }}
+      </div>
+    </form>
+
+    <div class="form-footer" style="margin-top:2rem">
+      <a href="{{ url_for('auth.login') }}" class="btn btn-ghost btn-sm">← Back to login</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

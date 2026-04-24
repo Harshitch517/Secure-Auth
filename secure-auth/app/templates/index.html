@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero">
+  <div class="hero-badge">
+    <span style="font-size:1.1rem">🛡️</span> Bank-Grade Security
+  </div>
+
+  <h1 class="hero-title">
+    Uncompromising<br>
+    <span class="highlight">Authentication Framework</span>
+  </h1>
+
+  <p class="hero-sub">
+    A secure, sandboxed OS-level authentication system. Features robust multi-factor authentication, strong password enforcement, and protection against buffer overflows and privilege escalation.
+  </p>
+
+  <div class="hero-actions">
+    <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Create an account</a>
+    <a href="{{ url_for('auth.login') }}" class="btn btn-ghost">Sign in</a>
+  </div>
+
+  <div class="features">
+    <div class="feature-pill">
+      <span class="feature-pill-icon">✉️</span>
+      <span>Email OTP 2FA</span>
+    </div>
+    <div class="feature-pill">
+      <span class="feature-pill-icon">🔒</span>
+      <span>Buffer Protection</span>
+    </div>
+    <div class="feature-pill">
+      <span class="feature-pill-icon">🕵️</span>
+      <span>Audit Logging</span>
+    </div>
+    <div class="feature-pill">
+      <span class="feature-pill-icon">⏱️</span>
+      <span>Anti-Brute Force</span>
+    </div>
+  </div>
+</div>
+{% endblock %}
