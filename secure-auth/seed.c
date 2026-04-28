@@ -18,7 +18,7 @@ int main() {
         printf("Email: harshitola05@gmail.com\n");
         printf("Password: Admin@123\n");
     } else {
-        printf("Failed to create admin user (it might already exist).\n");
+        printf("Failed to create admin user (it might already exist!!).\n");
     }
     db_close();
     return 0;
